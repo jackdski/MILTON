@@ -24,7 +24,7 @@ void createPWM(uint8_t percent) {
 
 void delay(float seconds) {
     uint16_t i;
-    for(i = 0; i < seconds * 12000; i++);
+    for(i = 0; i < seconds *12000; i++);
 }
 
 uint32_t distanceInEnc(uint32_t distance) {
@@ -38,13 +38,17 @@ void forward(uint32_t distance, uint8_t percent) {
     encoderLeftCount = 0;
     P5->OUT |= (BIT0 & BIT4);
     P5->OUT &= ~(BIT2 & BIT5);
-    uint16_t i;
+    volatile uint32_t i;
+    P3->OUT |= BIT2 & BIT3;
     while(encoderRightCount < 800) {
-        P3->OUT |= (BIT2 & BIT3);
-        for(i = 0; i < percent*1000; i++); // delay on
-        P3->OUT &= ~(BIT2 & BIT3);
-        for(i = 0; i < (100-percent) * 1000; i++); // delay off
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < (percent*100); i++); // delay on
+        //P3->OUT &= ~(BIT2 & BIT3);
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < ((100-percent) * 100); i++); // delay off
+        //for(j = 0; j < (percent*100); j++); // delay on
     }
+    P3->OUT &= ~(BIT2 & BIT3);
     P5->OUT &= ~(BIT0 & BIT2 & BIT4 & BIT5);
 }
 
@@ -52,15 +56,19 @@ void turnAroundCCW() {
     uint8_t percent = 25; // run at 25%
     encoderRightCount = 0;
     encoderLeftCount = 0;
-    P5->OUT |= (BIT0 & BIT5);
+    P5->OUT |= (BIT0 | BIT5);
     P5->OUT &= ~(BIT2 & BIT4);
-    uint16_t i;
+    volatile uint32_t i;
+    P3->OUT |= BIT2 & BIT3;
     while(encoderRightCount < 800) {
-        P3->OUT |= (BIT2 & BIT3);
-        for(i = 0; i < percent*1000; i++); // delay on
-        P3->OUT &= ~(BIT2 & BIT3);
-        for(i = 0; i < (100-percent) * 1000; i++); // delay off
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < (percent*100); i++); // delay on
+        //P3->OUT &= ~(BIT2 & BIT3);
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < ((100-percent) * 100); i++); // delay off
+        //for(j = 0; j < (percent*100); j++); // delay on
     }
+    P3->OUT &= ~(BIT2 & BIT3);
     P5->OUT &= ~(BIT0 & BIT2 & BIT4 & BIT5);
 }
 
@@ -70,13 +78,17 @@ void turnAroundCW() {
     encoderLeftCount = 0;
     P5->OUT |= (BIT2 & BIT4);
     P5->OUT &= ~(BIT0 & BIT5);
+    P3->OUT |= BIT2 & BIT3;
     uint16_t i;
     while(encoderRightCount < 800) {
-        P3->OUT |= (BIT2 & BIT3);
-        for(i = 0; i < percent*1000; i++); // delay on
-        P3->OUT &= ~(BIT2 & BIT3);
-        for(i = 0; i < (100-percent) * 1000; i++); // delay off
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < (percent*100); i++); // delay on
+        //P3->OUT &= ~(BIT2 & BIT3);
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < ((100-percent) * 100); i++); // delay off
+        //for(j = 0; j < (percent*100); j++); // delay on
     }
+    P3->OUT &= ~(BIT2 & BIT3);
     P5->OUT &= ~(BIT0 & BIT2 & BIT4 & BIT5);
 }
 
@@ -87,12 +99,16 @@ void turnLeft() {
     P5->OUT |= (BIT0 & BIT5);
     P5->OUT &= ~(BIT2 & BIT4);
     uint16_t i;
-    while(encoderRightCount < 400) {
-        P3->OUT |= (BIT2 & BIT3);
-        for(i = 0; i < percent*1000; i++); // delay on
-        P3->OUT &= ~(BIT2 & BIT3);
-        for(i = 0; i < (100-percent) * 1000; i++); // delay off
+    P3->OUT |= BIT2 & BIT3;
+    while(encoderRightCount < 800) {
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < (percent*100); i++); // delay on
+        //P3->OUT &= ~(BIT2 & BIT3);
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < ((100-percent) * 100); i++); // delay off
+        //for(j = 0; j < (percent*100); j++); // delay on
     }
+    P3->OUT &= ~(BIT2 & BIT3);
     P5->OUT &= ~(BIT0 & BIT2 & BIT4 & BIT5);
 }
 
@@ -103,12 +119,16 @@ void turnRight() {
     P5->OUT |= (BIT2 & BIT4);
     P5->OUT &= ~(BIT0 & BIT5);
     uint16_t i;
-    while(encoderRightCount < 400) {
-        P3->OUT |= (BIT2 & BIT3);
-        for(i = 0; i < percent*1000; i++); // delay on
-        P3->OUT &= ~(BIT2 & BIT3);
-        for(i = 0; i < (100-percent) * 1000; i++); // delay off
+    P3->OUT |= BIT2 & BIT3;
+    while(encoderRightCount < 800) {
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < (percent*100); i++); // delay on
+        //P3->OUT &= ~(BIT2 & BIT3);
+        P3->OUT ^= (BIT2 | BIT3);
+        for(i = 0; i < ((100-percent) * 100); i++); // delay off
+        //for(j = 0; j < (percent*100); j++); // delay on
     }
+    P3->OUT &= ~(BIT2 & BIT3);
     P5->OUT &= ~(BIT0 & BIT2 & BIT4 & BIT5);
 }
 
@@ -146,26 +166,23 @@ void configurePins() {
     // PWM outputs (port 3.2 and port 3.3)
     P3->SEL0 &= ~(BIT2 & BIT3 & BIT5 & BIT6 & BIT7);// set to General IO Mode
     P3->SEL1 &= ~(BIT2 & BIT3 & BIT5 & BIT6 & BIT7);// Make sure not to be in tertiary function
-    P3->DIR &= ~(BIT5 & BIT6 & BIT7);               // set direction to input
-    P3->DIR |= (BIT2 & BIT3);                       // set direction to output
-    P3->REN |= (BIT2 & BIT3 & BIT5 & BIT6 & BIT7);  // enable pullup
-    P3->OUT |= (BIT2 & BIT3 & BIT5 & BIT6 & BIT7);  // clear interrupts
-    P3->IES = (BIT2 & BIT3 & BIT5 & BIT6 & BIT7);   // set IFT flag to high to low transition
+    //P3->DIR &= ~(BIT5 & BIT6 & BIT7);               // set direction to input
+    P3->DIR |= (BIT2 | BIT3);                       // set direction to output
+    P3->REN |= (BIT2 | BIT3);// & BIT5 & BIT6 & BIT7);  // enable pullup
+    P3->OUT |= (BIT2 | BIT3 | BIT5 | BIT6 | BIT7);  // clear interrupts
+    P3->OUT = 0;
+    P3->IES &= ~(BIT2 & BIT3);   // set IFT flag to high to low transition
 
     P3->IFG = 0;  // zero all interrupt flags
-    P3->IE =  (BIT2 & BIT3 & BIT5 & BIT6 & BIT7);       // Enable port interrupt
+    P3->IE |=  (BIT6 | BIT7);       // Enable port interrupt
 
     // CW/CCW Control Outputs
-    P5->SEL0 &= ~(BIT0 & BIT2 & BIT4 & BIT5);
-    P5->SEL1 &= ~(BIT0 & BIT2 & BIT4 & BIT5);
-    P5->DIR |= (BIT0 & BIT2 & BIT4 & BIT5); // set to outputs
-    P5->REN |= (BIT0 & BIT2 & BIT4 & BIT5);
-    P5->OUT |= (BIT0 & BIT2 & BIT4 & BIT5);
-    P5->IES = (BIT0 & BIT2 & BIT4 & BIT5);
-
-    P5->IFG = 0;
-    P5->IE = (BIT0 & BIT2 & BIT4 & BIT5);
+    P5->SEL0 &= ~(BIT0 & BIT2 & BIT4 & BIT5);      // set to General IO Mode
+    P5->SEL1 &= ~(BIT0 & BIT2 & BIT4 & BIT5);      // Make sure not to be in tertiary function
+    P5->DIR |= (BIT0 | BIT2 | BIT4 | BIT5);       // set direction to output
+    P5->REN |= (BIT0 | BIT2 | BIT4 | BIT5);          // enable pullup
+    P5->OUT |= (BIT0 | BIT2 | BIT4 | BIT5);          // clear interrupts
 
     NVIC_EnableIRQ(PORT3_IRQn);
-    NVIC_EnableIRQ(PORT5_IRQn);
+    //NVIC_EnableIRQ(PORT5_IRQn);
 }

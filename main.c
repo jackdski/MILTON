@@ -33,27 +33,27 @@ volatile uint8_t onOff = 0;
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
-    configurePins();
+	configurePins();
     __enable_interrupt();
 
     uint16_t twoFeet = distanceInEnc(TWOFEET);
 
-    uint16_t i;
+    //uint16_t i;
 	while(1) {
 	    // two feet stuff
-	    if(P3->IN & BIT5) {
-#ifdef EXTRACREDIT
-	        extraCredit();
-#endif
+//	    if(P3->IN & BIT5) {
+//#ifdef EXTRACREDIT
+//	        extraCredit();
+//#endif
 	       delay(1.0); // 1s delay
-	       forward(twoFeet, 25); // forward 2ft at 25% speed
+	       forward(twoFeet, 50); // forward 2ft at 25% speed
 	       delay(0.5); // 0.5s delay
 	       turnAroundCW();
 	       delay(0.5); // 0.5s delay
-	       forward(twoFeet, 25);
+	       forward(twoFeet, 50);
            delay(0.5); // 0.5s delay
            turnAroundCCW();
-	    }
+	    //}
 	}
 
 }
